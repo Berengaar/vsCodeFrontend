@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from 'src/app/models/product';
+import { ProductResponseModel } from 'src/app/models/productResponseModel';
+import { ProductService } from 'src/app/Services/product.service';
 
 @Component({
   selector: 'app-product',
@@ -7,16 +9,19 @@ import { Product } from 'src/app/models/product';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit {
-
-  user = "Emirhan avcı"   //Tip güvenliği şart değil ama önemli, noktalı virgül şart değil
- 
-  //süslü parantez{} obje demek
-  //Köşeli parantez [] liste demek
-
   products: Product[] = [];
-  constructor() { }
+  dataLoaded=false;
+
+  constructor(private ProductService: ProductService) { }
 
   ngOnInit(): void {
+    this.getProducts();  //herhangi bir typescripte ulaşmak için this yazılır
   }
 
+  getProducts() {
+    this.ProductService.getProducts().subscribe(response => {
+      this.products = response.data;
+      this.dataLoaded=true;
+    })
+  }
 }
